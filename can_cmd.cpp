@@ -1,4 +1,5 @@
 #include "can_cmd.h"
+#define DEBUG_MSG
 
 bool Command::execute() 
 {

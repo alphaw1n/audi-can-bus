@@ -4,12 +4,9 @@
 #include <vector>
 #include <algorithm>
 
-#include <mcp_can.h>
-#include <mcp_can_dfs.h>
+#include <mcp_can_mcp2515.h>
+#include <mcp_can_dfs_mcp2515.h>
 #include <SPI.h>
-
-const int SPI_CS_PIN = 10;
-MCP_CAN CAN(SPI_CS_PIN);
 
 #define IGNITION_STATE  0x271
 #define IGNITION_PIN    5
