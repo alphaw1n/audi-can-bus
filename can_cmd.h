@@ -4,9 +4,9 @@
 #include <vector>
 #include <algorithm>
 
-//#include <mcp_can_mcp2515.h>
-//#include <mcp_can_dfs_mcp2515.h>
-#include <mcp_can_original.h>
+#include <mcp_can_mcp2515.h>
+#include <mcp_can_dfs_mcp2515.h>
+//#include <mcp_can_original.h>
 
 #include <SPI.h>
 
@@ -66,74 +66,36 @@ class Command
 class LightCommand: public Command
 {
   public :
-//----------------------------------------------------------------------          
-      LightCommand( MCP_CAN* port) 
-      {
-        Serial.println("light_cmd created");
-        initCmd(LIGHT_STATE, 3, 100, port);
-      }
-//----------------------------------------------------------------------              
+      LightCommand( MCP_CAN* port);
       ~LightCommand(){};
       
   private :
       bool m_light_state;
-//----------------------------------------------------------------------              
-      void    getData(uint8_t *d)
-      {
-//        Serial.println("light_cmd::getData()");
-        uint8_t data[getDataSize()] = {0, 0x64, 0};
-        memcpy(d, data, getDataSize());
-      };
-//----------------------------------------------------------------------              
+      void    getData(uint8_t *d);
 };
 //----------------------------------------------------------------------        
 
 class IgnitionCommand: public Command
 {
   public :
-//----------------------------------------------------------------------          
-      IgnitionCommand( MCP_CAN* port) 
-      {
-        Serial.println("ignition_cmd created");
-        initCmd(IGNITION_STATE, 1, 100, port);
-      }
-//----------------------------------------------------------------------              
+      IgnitionCommand( MCP_CAN* port);
       ~IgnitionCommand(){};
       
   private :
       bool m_light_state;
-//----------------------------------------------------------------------              
-      void    getData(uint8_t *d)
-      {
-//        Serial.println("light_cmd::getData()");
-        uint8_t data[getDataSize()] = {0x7};
-        memcpy(d, data, getDataSize());
-      };
-//----------------------------------------------------------------------              
+      void    getData(uint8_t *d);
 };
 //----------------------------------------------------------------------        
 
 class SpeedCommand: public Command
 {
   public :
-//----------------------------------------------------------------------          
-      SpeedCommand(int id_cmd, unsigned long each_ms, MCP_CAN* port) 
-      {
-        Serial.println("speed_cmd created");
-        initCmd(id_cmd, 8, each_ms, port);
-      }
-//----------------------------------------------------------------------              
+      SpeedCommand( MCP_CAN* port );
       ~SpeedCommand(){};
       
   private :
       bool m_light_state;
-//----------------------------------------------------------------------              
-      void    getData(uint8_t *d)
-      {
-//        Serial.println("speed_cmd::getData()");
-        uint8_t data[getDataSize()] = {0, 0, 0, 0, 0, 0, 0, 0};
-        memcpy(d, data, getDataSize());
-      };
+      void    getData(uint8_t *d);
 //----------------------------------------------------------------------              
 };
 

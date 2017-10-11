@@ -69,3 +69,43 @@ bool Command::send_cmd()
   
   return sndResult;
 };
+
+LightCommand::LightCommand( MCP_CAN* port) 
+{
+  Serial.println("light_cmd created");
+  initCmd(LIGHT_STATE, 3, 100, port);
+};
+
+void LightCommand::getData(uint8_t *d)
+{
+//        Serial.println("light_cmd::getData()");
+  uint8_t data[getDataSize()] = {0, 0x64, 0};
+  memcpy(d, data, getDataSize());
+};
+
+IgnitionCommand::IgnitionCommand( MCP_CAN* port) 
+{
+  Serial.println("ignition_cmd created");
+  initCmd(IGNITION_STATE, 1, 100, port);
+};
+
+void IgnitionCommand::getData(uint8_t *d)
+{
+//        Serial.println("light_cmd::getData()");
+  uint8_t data[getDataSize()] = {0x7};
+  memcpy(d, data, getDataSize());
+};
+
+SpeedCommand::SpeedCommand( MCP_CAN* port ) 
+{
+  Serial.println("speed_cmd created");
+  initCmd(SPEED, 8, 100, port);
+};
+
+void SpeedCommand::getData(uint8_t *d)
+{
+//        Serial.println("speed_cmd::getData()");
+  uint8_t data[getDataSize()] = {0, 0, 0, 0, 0, 0, 0, 0};
+  memcpy(d, data, getDataSize());
+};
+

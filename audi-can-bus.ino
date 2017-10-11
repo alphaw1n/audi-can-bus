@@ -1,7 +1,3 @@
-//#include <StandardCplusplus.h>
-//#include <vector>
-//#include <algorithm>
-
 #include "can_cmd.h"
 
 std::vector<Command*> commands;
