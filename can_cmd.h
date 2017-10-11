@@ -4,8 +4,10 @@
 #include <vector>
 #include <algorithm>
 
-#include <mcp_can_mcp2515.h>
-#include <mcp_can_dfs_mcp2515.h>
+//#include <mcp_can_mcp2515.h>
+//#include <mcp_can_dfs_mcp2515.h>
+#include <mcp_can_original.h>
+
 #include <SPI.h>
 
 #define IGNITION_STATE  0x271
@@ -65,10 +67,10 @@ class LightCommand: public Command
 {
   public :
 //----------------------------------------------------------------------          
-      LightCommand(int id_cmd, unsigned long each_ms, MCP_CAN* port) 
+      LightCommand( MCP_CAN* port) 
       {
         Serial.println("light_cmd created");
-        initCmd(id_cmd, 3, each_ms, port);
+        initCmd(LIGHT_STATE, 3, 100, port);
       }
 //----------------------------------------------------------------------              
       ~LightCommand(){};
@@ -79,7 +81,7 @@ class LightCommand: public Command
       void    getData(uint8_t *d)
       {
 //        Serial.println("light_cmd::getData()");
-        uint8_t data[getDataSize()] = {0x64, 0, 0};
+        uint8_t data[getDataSize()] = {0, 0x64, 0};
         memcpy(d, data, getDataSize());
       };
 //----------------------------------------------------------------------              
@@ -90,10 +92,10 @@ class IgnitionCommand: public Command
 {
   public :
 //----------------------------------------------------------------------          
-      IgnitionCommand(int id_cmd, unsigned long each_ms, MCP_CAN* port) 
+      IgnitionCommand( MCP_CAN* port) 
       {
         Serial.println("ignition_cmd created");
-        initCmd(id_cmd, 1, each_ms, port);
+        initCmd(IGNITION_STATE, 1, 100, port);
       }
 //----------------------------------------------------------------------              
       ~IgnitionCommand(){};

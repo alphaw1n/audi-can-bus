@@ -18,8 +18,9 @@ void setup()
 {
     Serial.begin(115200);
 
-    byte mcp_clock = MCP_8MHz;
-    while (CAN_OK != CAN.begin(CAN_100KBPS, mcp_clock))
+    byte mcp_clock = MCP_16MHz;
+//    while (CAN_OK != CAN.begin(CAN_100KBPS, mcp_clock))
+while (CAN_OK != CAN.begin(CAN_100KBPS))
     {
         Serial.println("CAN BUS Shield init fail");
         Serial.println(" Init CAN BUS Shield again");
@@ -29,8 +30,8 @@ void setup()
     Serial.print( 16 / mcp_clock );
     Serial.println(" MHz");
 
-    commands.push_back(new LightCommand(     LIGHT_STATE,    100, &CAN));
-    commands.push_back(new IgnitionCommand(  IGNITION_STATE, 100, &CAN));
+    commands.push_back(new LightCommand(    &CAN));
+    commands.push_back(new IgnitionCommand( &CAN));
 //    commands.push_back(new speed_cmd(     SPEED,          100, &CAN));
 }
 
