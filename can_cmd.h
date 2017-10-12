@@ -57,6 +57,7 @@ class Command
         size_t          m_data_size;
         unsigned int    m_header;
         MCP_CAN*        m_port;
+        long unsigned int m_last_millis;
 
         virtual void    getData(uint8_t *d);
         void setTimer(unsigned long   each_ms);

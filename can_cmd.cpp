@@ -4,8 +4,10 @@
 bool Command::execute() 
 {
 //          Serial.println("command::execute()");
-  if( m_reply_timer.isActive() )
+  if(  m_reply_timer.isActive() )
+  {
     return send_cmd();
+  }
   
   return false;
 };
@@ -16,6 +18,7 @@ void Command::initCmd(unsigned int id_cmd, size_t cmd_size, long unsigned int ea
   m_port = port;
   m_data_size = cmd_size;
   setTimer(each_ms);
+  m_last_millis = 0;
 };
 
 size_t Command::getDataSize()
@@ -44,14 +47,25 @@ bool Command::send_cmd()
 //          Serial.println("  command::send_cmd()");
   uint8_t data[m_data_size];
   getData(data);
+
+  long unsigned int resDelay = millis() - m_last_millis;
+  if( m_last_millis != 0 )
+    m_reply_timer.setAdjust(resDelay);
+  m_last_millis = millis();  
+    
   byte sndResult = m_port->sendMsgBuf(m_header, 0, m_data_size, data);
+  
   
   #ifdef DEBUG_MSG
     if( sndResult == CAN_OK )
     {
       Serial.print("TX[\t");
       Serial.print(millis());
-      Serial.print("\t] -> ");
+      Serial.print("\t] Delay = \t");
+      
+      Serial.print(resDelay);
+      Serial.print("\t");
+      Serial.print("-> ");
       Serial.print(m_header, HEX);
       for(size_t i = 0; i < m_data_size; i++)
       {
@@ -66,7 +80,6 @@ bool Command::send_cmd()
       Serial.println(sndResult);
     }
   #endif
-  
   return sndResult;
 };
 
@@ -79,7 +92,7 @@ LightCommand::LightCommand( MCP_CAN* port)
 void LightCommand::getData(uint8_t *d)
 {
 //        Serial.println("light_cmd::getData()");
-  uint8_t data[getDataSize()] = {0, 0x64, 0};
+  uint8_t data[3] = {0, 0x64, 0};
   memcpy(d, data, getDataSize());
 };
 
@@ -92,7 +105,7 @@ IgnitionCommand::IgnitionCommand( MCP_CAN* port)
 void IgnitionCommand::getData(uint8_t *d)
 {
 //        Serial.println("light_cmd::getData()");
-  uint8_t data[getDataSize()] = {0x7};
+  uint8_t data[1] = {0x7};
   memcpy(d, data, getDataSize());
 };
 
@@ -105,7 +118,8 @@ SpeedCommand::SpeedCommand( MCP_CAN* port )
 void SpeedCommand::getData(uint8_t *d)
 {
 //        Serial.println("speed_cmd::getData()");
-  uint8_t data[getDataSize()] = {0, 0, 0, 0, 0, 0, 0, 0};
+//  uint8_t data[getDataSize()] = {0, 0, 0, 0, 0, 0, 0, 0}; //TODO
+  uint8_t data[8] = {0, 0, 0, 0, 0, 0, 0, 0}; //TODO
   memcpy(d, data, getDataSize());
 };
 
