@@ -1,3 +1,6 @@
+#ifndef __HEADER_TIMER
+#define __HEADER_TIMER 1
+
 class Timer
 {
   private:
@@ -13,3 +16,5 @@ class Timer
     bool isActive();
     void setAdjust(long unsigned int adjust);
 };
+
+#endif;
