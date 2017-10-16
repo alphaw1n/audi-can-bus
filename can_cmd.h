@@ -15,7 +15,9 @@
 #include <SPI.h>
 
 #define IGNITION_STATE  0x271
+#define IGNITION_SIZE   1
 #define IGNITION_PIN    5
+#define IGNITION_TIME   100
 /*
   h271 Ignition state, 1 byte, 100ms
   -h10: Fzg. unverschlossen, Schluessel steckt nicht Without Key
@@ -26,7 +28,9 @@
   -h0B: Fzg. unverschlossen, Schluessel steckt in Pos. 4, Ignition ON, Starter rotating
 */
 #define LIGHT_STATE     0x635
-#define LIGHT_PIN
+#define LIGHT_SIZE      3
+#define LIGHT_PIN       3
+#define LIGHT_TIME      100
 /*
   h635 Light, 3 byte, 100ms
   -h 00 00 00: Light OFF, 58d 100% Dimmung
@@ -34,8 +38,10 @@
   -h 64 64 00: Light ON, 58d 0% Dimmung
   ID 635 : Licht Dimmung (noch nicht fertig)
 */
-#define SPEED           0x351
+#define SPEED_STATE     0x351
+#define SPEED_SIZE      8
 #define SPEED_PIN       4
+#define SPEED_TIME      100
 /*
   351h 8 45 00 00 00 00 75 7B 10 100 1795 Geschwindigkeit speed
 
@@ -48,22 +54,29 @@
 class Command
 {
   public :
-    Command(){};
+    Command();
     virtual ~Command() {};
     bool execute();
-    void initCmd(unsigned int id_cmd, size_t cmd_size, long unsigned int each_ms, MCP_CAN* port);
+    void initCmd(unsigned int id_cmd, size_t cmd_size, long unsigned int each_ms);
+    
+    static unsigned long getDelay();
+    static bool initCAN(const byte mcp_clock);
 
     size_t getDataSize();
     uint8_t getHeader();
+  
+  protected :
+    static int            m_total_cmd;
+    static unsigned long  m_total_delay;
+    static MCP_CAN*       m_port;
 
   private:
-    Timer           m_reply_timer;
-    size_t          m_data_size;
-    unsigned int    m_header;
-    MCP_CAN*        m_port;
+    Timer             m_reply_timer;
+    size_t            m_data_size;
+    unsigned int      m_header;
     long unsigned int m_last_millis;
-    static int      m_total_cmd;
-    static unsigned long m_total_delay;
+    
+    MCP_CAN*          getPort();
 
     virtual void    getData(uint8_t *d);
     void setTimer(unsigned long   each_ms);
@@ -73,7 +86,7 @@ class Command
 class LightCommand: public Command
 {
   public :
-    LightCommand( MCP_CAN* port);
+    LightCommand( );
     ~LightCommand() {};
 
   private :
@@ -84,7 +97,7 @@ class LightCommand: public Command
 class IgnitionCommand: public Command
 {
   public :
-    IgnitionCommand( MCP_CAN* port);
+    IgnitionCommand( );
     ~IgnitionCommand() {};
 
   private :
@@ -95,7 +108,7 @@ class IgnitionCommand: public Command
 class SpeedCommand: public Command
 {
   public :
-    SpeedCommand( MCP_CAN* port );
+    SpeedCommand( );
     ~SpeedCommand() {};
 
   private :

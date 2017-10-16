@@ -24,9 +24,7 @@ bool Timer::isActive()
     return true;
   }
   else
-  {
     return false;
-  }
 }
 
 void Timer::setAdjust(long unsigned int adjust)
