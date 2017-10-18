@@ -7,6 +7,7 @@ class Timer
     long unsigned int m_alarm_after_ms;
     long unsigned int m_each_ms;
     long unsigned int m_adjust;
+    bool m_inited;
 
   public:
     Timer();
@@ -15,6 +16,7 @@ class Timer
     void start(long unsigned int toStart_ms);
     bool isActive();
     void setAdjust(long unsigned int adjust);
+    bool isInited();
 };
 
 #endif;

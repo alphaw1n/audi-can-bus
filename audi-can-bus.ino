@@ -13,7 +13,7 @@ void setup()
   Command::initCAN( 1 );
   commands.push_back( new LightCommand() );
   commands.push_back( new IgnitionCommand() );
-  //    commands.push_back(new speed_cmd( &CAN) );
+  //    commands.push_back(new speed_cmd() );
 }
 
 void loop()
